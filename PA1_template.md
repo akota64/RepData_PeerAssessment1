@@ -97,12 +97,11 @@ There also seem to be many NA's in the steps column, but we will keep them for n
 First, let's look at the data and answer the question: How many steps are taken each day?
 
 ```r
-ggplot(df, aes(x=date, weights=steps)) + 
-    geom_histogram(
-        ## Number of bins = Number of total days between min and max days
-        bins = (max(df$date)-min(df$date)+1),
-        fill="coral2", col="black") +
-    labs(x="Date", y="Total Steps", title="Total Steps Taken per Day")
+daily_steps <- df %>% 
+    group_by(date) %>% 
+    summarize(tsteps=sum(steps, na.rm = TRUE))
+hist(daily_steps$tsteps, breaks=20,
+     xlab="Total Daily Steps", ylab="Number of Days", main="Distribution of Total Daily Steps")
 ```
 
 ![](PA1_template_files/figure-html/dailystepsplot-1.png)<!-- -->
@@ -110,9 +109,6 @@ ggplot(df, aes(x=date, weights=steps)) +
 Now, we will find the mean and median values of total number of steps taken per day (over all days recorded). We will first make a data frame with daily total steps, and then find these values.
 
 ```r
-daily_steps <- df %>% 
-    group_by(date) %>% 
-    summarize(tsteps=sum(steps, na.rm = TRUE))
 m <- mean(daily_steps$tsteps)
 md <- median(daily_steps$tsteps)
 data.frame(
@@ -193,12 +189,12 @@ So our clean_df dataset should now contain no NA values, instead substituting th
 Re-doing our part one analysis with our cleaned data:
 
 ```r
-ggplot(clean_df, aes(x=date, weights=steps)) + 
-    geom_histogram(
-        ## Number of bins = Number of total days between min and max days
-        bins = (max(clean_df$date)-min(clean_df$date)+1),
-        fill="coral2", col="black") +
-    labs(x="Date", y="Total Steps", title="Total Steps Taken per Day")
+clean_daily_steps <- clean_df %>% 
+    group_by(date) %>% 
+    summarize(tsteps=sum(steps))
+hist(clean_daily_steps$tsteps, breaks=20,
+     xlab="Total Daily Steps", ylab="Number of Days", 
+     main="Distribution of Total Daily Steps (Cleaned Data)")
 ```
 
 ![](PA1_template_files/figure-html/cleandailystepsplot-1.png)<!-- -->
@@ -208,9 +204,6 @@ We see that the histogram has clearly changed, showing no daily bars at 0 steps 
 Now, finding the mean and median values of total number of steps taken per day for the clean data:
 
 ```r
-clean_daily_steps <- clean_df %>% 
-    group_by(date) %>% 
-    summarize(tsteps=sum(steps))
 clean_m <- mean(clean_daily_steps$tsteps)
 clean_md <- median(clean_daily_steps$tsteps)
 data.frame(
@@ -259,7 +252,7 @@ avg_day_type_activity <- clean_df %>%
 ggplot(avg_day_type_activity, aes(interval, msteps)) +
     geom_line() +
     facet_grid(rows = vars(day_type)) +
-    labs(x = "Interval", y= "Average Steps in Interval")
+    labs(x = "Interval", y= "Average Steps in Interval", title="Activity on Weekdays vs Weekends")
 ```
 
 ![](PA1_template_files/figure-html/avgdailyactivitybydaytype-1.png)<!-- -->
