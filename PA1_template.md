@@ -188,7 +188,7 @@ sum(is.na(clean_df))
 ```
 ## [1] 0
 ```
-So our clean_df dataset should now contains no NA values, instead substituting the mean steps for any interval with NA steps.  
+So our clean_df dataset should now contain no NA values, instead substituting the mean steps for any interval with NA steps.  
   
 Re-doing our part one analysis with our cleaned data:
 
@@ -239,6 +239,7 @@ date_to_day_type <- function(date){
     }
 }
 clean_df$day_type <- sapply(clean_df$date,date_to_day_type)
+clean_df <- transform(clean_df, day_type=as.factor(day_type))
 ```
 
 Now that we've added the new day_type column, let's group over it and process/visualize the data once again, taking the mean steps per interval over all relevant days in that day_type.

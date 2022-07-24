@@ -493,7 +493,7 @@ for(x in 1:nrow(clean_df)){
 }
 sum(is.na(clean_df))</code></pre>
 <pre><code>## [1] 0</code></pre>
-<p>So our clean_df dataset should now contains no NA values, instead
+<p>So our clean_df dataset should now contain no NA values, instead
 substituting the mean steps for any interval with NA steps.</p>
 <p>Re-doing our part one analysis with our cleaned data:</p>
 <pre class="r"><code>ggplot(clean_df, aes(x=date, weights=steps)) + 
@@ -544,7 +544,8 @@ weekend.</p>
         return(&quot;weekday&quot;)
     }
 }
-clean_df$day_type &lt;- sapply(clean_df$date,date_to_day_type)</code></pre>
+clean_df$day_type &lt;- sapply(clean_df$date,date_to_day_type)
+clean_df &lt;- transform(clean_df, day_type=as.factor(day_type))</code></pre>
 <p>Now that we’ve added the new day_type column, let’s group over it and
 process/visualize the data once again, taking the mean steps per
 interval over all relevant days in that day_type.</p>
